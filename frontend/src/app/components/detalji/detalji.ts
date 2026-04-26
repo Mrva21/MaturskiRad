@@ -88,7 +88,7 @@ export class Detalji {
       };
       this.servis2.postComment(newComment).subscribe(data => {
         alert("Comment Posted");
-        window.location.reload();
+        this.loadComments();
       });
     });
   }
@@ -108,20 +108,19 @@ export class Detalji {
       liked_by: changeLikedBy
     };
     this.servis2.updateComment(id, change).subscribe(data => {
-      window.location.reload();
+      this.loadComments();
     });
   }
 
   unlikeComment(id: string, comment: any) {
     let changeLikedBy = comment.liked_by;
     changeLikedBy = changeLikedBy.filter((u: any) => u !== this.email);
-    console.log(changeLikedBy);
     const change: any = {
       likes: Number(comment.likes) - 1,
       liked_by: changeLikedBy
     };
     this.servis2.updateComment(id, change).subscribe(data => {
-      window.location.reload();
+      this.loadComments();
     });
   }
 
