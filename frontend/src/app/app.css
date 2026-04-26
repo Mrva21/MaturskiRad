@@ -2,6 +2,13 @@
   font-family: 'Orbitron', sans-serif;
 }
 
+.navbar-sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
 .judge-brand {
   color: #9146ff;
 }
@@ -69,8 +76,4 @@ input.form-control {
 
 input::placeholder {
   color: #b0b0b0;
-}
-
-body {
-  padding-bottom: 70px;
 }
