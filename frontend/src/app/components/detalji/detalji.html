@@ -1,0 +1,155 @@
+<div class="container mt-4">
+  @if (game) {
+    <div class="row align-items-stretch section">
+      <div class="col-12 col-md-6 mb-3 mb-md-0">
+        <div class="image-wrapper h-100">
+          <img 
+            [src]="game.background_image" 
+            class="w-100 h-100"
+            alt="{{ game.name }}"
+          >
+          <div class="overlay"></div>
+          <div class="rating-badge">
+            {{ game.metacritic || "**" }}
+          </div>
+          <div class="platforms">
+            @if (game.parent_platforms?.some(p => p.platform.name === 'PC')) {
+              <i class="bi bi-pc-display"></i>
+            }
+            @if (game.parent_platforms?.some(p => p.platform.name === 'PlayStation')) {
+              <i class="bi bi-playstation"></i>
+            }
+            @if (game.parent_platforms?.some(p => p.platform.name === 'Xbox')) {
+              <i class="bi bi-xbox"></i>
+            }
+            @if (game.parent_platforms?.some(p => p.platform.name === 'Nintendo')) {
+              <i class="bi bi-nintendo-switch"></i>
+            }
+            @if (game.parent_platforms?.some(p => p.platform.id === 3)) {
+              <i class="bi bi-apple"></i>
+            }
+            @if (game.parent_platforms?.some(p => p.platform.name === 'Android')) {
+              <i class="bi bi-android2"></i>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 d-flex flex-column gap-3 text-white">
+        <h2 class="mt-2">{{ game.name }}</h2>
+        <div class="brdr p-3 rounded bg-dark">
+          <p [innerHTML]="game.description"></p>
+        </div>
+        <div>
+          <p class="mb-1"><strong>Release:</strong> {{ game.released }}</p>
+          <p class="mb-0"><strong>Rating:</strong> ⭐ {{ game.rating }}</p>
+        </div>
+        <div>
+          @if (game.website){
+            <a [href]="game.website" target="_blank" class="btn btn-outline-primary me-3">
+              View Website
+            </a>
+          }
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+          @for (genre of game.genres; track genre.id) {
+            <span class="genre">
+              {{ genre.name }}
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
+<div class="container mt-4">
+  <div class="section text-white">
+    <div class="row">
+      <div class="col">
+        <h2 class="mt-2">Comments:</h2>
+      </div>
+      @if (loggedIn()) {
+        <div class="col text-end">
+          <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#commentModal">Add Comment</button>
+        </div>
+      }
+    </div>
+    @if (comments.length) {
+      @for (comment of comments; track $index) {
+        <div class="comment-card bg-dark p-3 mb-3 d-flex justify-content-between align-items-start">
+          <div>
+            <div class="comment-user">
+              <span class="email">{{ comment.user.email }}</span>
+              <span class="username">{{ comment.user.username }}</span>
+            </div>
+            <div class="comment-text mt-2 mb-2">
+              {{ comment.text }}
+            </div>
+            <div class="comment-actions d-flex gap-2">
+              @if (email === comment.user.email) {
+                <button class="btn btn-sm action-btn" (click)="deleteComment(comment._id)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              }
+              @if (loggedIn()) {
+                @if (liked(comment.liked_by)) {
+                  <button class="btn btn-sm action-btn liked" (click)="unlikeComment(comment._id, comment)">
+                    <i class="bi bi-heart-fill"></i>
+                  </button>
+                } @else {
+                  <button class="btn btn-sm action-btn" (click)="likeComment(comment._id, comment)">
+                    <i class="bi bi-heart"></i>
+                  </button>
+                }
+              }
+            </div>
+          </div>
+          <div class="text-end">
+            <div class="likes mt-2">
+              Date: {{ comment.date | date:'short' }}
+            </div>
+            <div class="likes mt-2">
+              Likes: {{ comment.likes }}
+            </div>
+          </div>
+        </div>
+      }
+    } @else {
+      <p class="text-center mt-4">No comments yet. Be the first to comment!</p>
+    }
+  </div>
+</div>
+<p class="d-lg-none" style="height: 65px;"></p>
+<p class="d-none d-lg-flex" style="height: 25px;"></p>
+
+<div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="commentModalLabel">Add new comment</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="comment-user">
+              <span class="email">{{ email }}</span>
+              <span class="username">{{ username }}</span>
+            </div>
+        <form>
+          <div class="form-group mt-3">
+            <textarea 
+              class="form-control custom-input bg-dark text-white"
+              rows="4"
+              placeholder="Write your comment..."
+              [(ngModel)]="text"
+              name="comment"
+              required>
+            </textarea>
+          </div>
+
+          <button type="submit" class="btn btn-outline-primary w-100 mt-3" (click)="addComment()">
+            Post Comment
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

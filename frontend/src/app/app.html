@@ -1,0 +1,146 @@
+<nav class="navbar navbar-expand-lg d-none d-lg-flex" style="background-color: #0e0e10;" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">
+      <span class="judge-brand">Pixel</span>
+      <span>Judge</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/games" routerLinkActive="active">Games</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/top-rated" routerLinkActive="active">Top Rated</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/trending" routerLinkActive="active">Trending</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/discussions" routerLinkActive="active">Discussions</a></li>
+      </ul>
+      <form class="d-flex me-3">
+        <input type="search" class="form-control" placeholder="Search for a game...">
+      </form>
+      @if (!isLoggedIn()) {
+        <div>
+          <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+            Log In
+          </button>
+          <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#registerModal">
+            Sign Up
+          </button>
+        </div>
+      }
+      @if (isLoggedIn()) {
+        <button class="btn btn-outline-primary" (click)="logout()">
+          Log Out
+        </button>
+      }
+    </div>
+  </div>
+</nav>
+
+<nav class="navbar navbar-expand-lg d-lg-none" style="background-color: #0e0e10;" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">
+      <span class="judge-brand">Pixel</span>
+      <span>Judge</span>
+    </a>
+    <form class="d-flex me-3">
+      <input type="search" class="form-control" placeholder="Search for a game...">
+    </form>
+    @if (!isLoggedIn()) {
+      <div>
+        <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+          Log In
+        </button>
+        <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#registerModal">
+          Sign Up
+        </button>
+      </div>
+    }
+    @if (isLoggedIn()) {
+      <button class="btn btn-outline-primary" (click)="logout()">
+        Log Out
+      </button>
+    }
+  </div>
+</nav>
+<nav class="navbar mobile-navbar d-lg-none" style="background-color: #0e0e10;" data-bs-theme="dark">
+  <div class="container-fluid d-flex justify-content-around">
+    <a class="nav-link text-center" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <i class="bi bi-house"></i>
+      <div>Home</div>
+    </a>
+    <a class="nav-link text-center" routerLink="/games" routerLinkActive="active">
+      <i class="bi bi-controller"></i>
+      <div>Games</div>
+    </a>
+    <a class="nav-link text-center" routerLink="/top-rated" routerLinkActive="active">
+      <i class="bi bi-star"></i>
+      <div>Top</div>
+    </a>
+    <a class="nav-link text-center" routerLink="/trending" routerLinkActive="active">
+      <i class="bi bi-fire"></i>
+      <div>Trending</div>
+    </a>
+    <a class="nav-link text-center" routerLink="/discussions" routerLinkActive="active">
+      <i class="bi bi-chat"></i>
+      <div>Chat</div>
+    </a>
+  </div>
+</nav>
+
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="loginModalLabel">Log in to PixelJudge</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="login()" #loginForm="ngForm">
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Username" name="username" [(ngModel)]="username" required>
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" placeholder="Password" name="password" [(ngModel)]="password" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 mb-3" [disabled]="!loginForm.valid">Log In</button>
+        </form>
+        <hr>
+        <p class="text-center mt-3">
+          Don't have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Sign up</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="loginModalLabel">Sign up to PixelJudge</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="register()" #registerForm="ngForm">
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Email" name="email" [(ngModel)]="email" required>
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Username" name="username" [(ngModel)]="username" required>
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" placeholder="Password" name="password" [(ngModel)]="password" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 mb-3" [disabled]="!registerForm.valid">Sign up</button>
+        </form>
+        <hr>
+        <p class="text-center mt-3">
+          Already have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Log in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<router-outlet />

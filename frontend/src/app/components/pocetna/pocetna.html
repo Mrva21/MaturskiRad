@@ -1,0 +1,44 @@
+<div class="container mt-4">
+  <div class="row align-items-stretch mb-5">
+    <div class="col-12 col-md-6 order-1 order-md-1 mb-3">
+      <div class="image-wrapper h-100">
+        <img src="/assets/images/pocetna.jpg" class="img-fluid rounded w-100 h-md-100 object-fit-cover">
+        <div class="overlay"></div>
+        <div class="carousel-caption d-md-block">
+          <h5>Rate and talk about your favourite games with a loving community</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 mb-3 order-2 order-md-2 d-flex flex-column rounded section mt-3 mt-md-0">
+      <h5 class="mb-3 mt-2">Trending:</h5>
+      <div class="row g-3 mb-3 h-100">
+        @for (game of trendingGames; track $index) {
+          <div class="col-4 d-flex flex-column">
+            <div class="card w-100 h-100" [routerLink]="['game/', game.id]">
+              <img [src]="game.background_image" class="card-img">
+              <div class="card-img-overlay">
+                <h5 class="card-title">{{game.name}}</h5>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container mt-2 mb-3 section d-flex flex-column rounded">
+  <h5 class="mb-3 mt-2">Top-Rated:</h5>
+  <div class="row g-3 mb-3 h-100">
+    @for (game of topRatedGames; track $index) {
+          <div class="col-4 d-flex flex-column">
+            <div class="card w-100 h-100" [routerLink]="['game/', game.id]">
+              <img [src]="game.background_image" class="card-img">
+              <div class="card-img-overlay">
+                <h5 class="card-title">{{game.name}}</h5>
+              </div>
+            </div>
+          </div>
+        }
+  </div>
+</div>
+<p class="d-lg-none" style="height: 65px;" routerLink="/"></p>

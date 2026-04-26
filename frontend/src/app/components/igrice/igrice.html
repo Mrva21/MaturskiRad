@@ -1,0 +1,109 @@
+<div class="container-fluid mt-3">
+  <div class="row g-2 mb-3">
+    <div class="col-md-6 filters">
+      <input class="form-control"
+             placeholder="Search games..."
+             (input)="onSearchChange($event.target.value)">
+    </div>
+    <div class="col-md-6">
+      <button class="btn btn-outline-primary w-100" (click)="loadGames()">
+        Filter
+      </button>
+    </div>
+  </div>
+  <div class="row g-2 mb-3">
+    <div class="col-md-4 filters">
+      <select class="form-select"
+              [(ngModel)]="filters.genre">
+        <option value="">All genres</option>
+        <option value="action">Action</option>
+        <option value="indie">Indie</option>
+        <option value="adventure">Adventure</option>
+        <option value="role-playing-games-rpg">RPG</option>
+        <option value="strategy">Strategy</option>
+        <option value="shooter">Shooter</option>
+        <option value="casual">Casual</option>
+        <option value="simulation">Simulation</option>
+        <option value="puzzle">Puzzle</option>
+        <option value="arcade">Arcade</option>
+        <option value="platformer">Platformer</option>
+        <option value="massively-multiplayer">Massively Multiplayer</option>
+        <option value="racing">Racing</option>
+        <option value="sports">Sports</option>
+        <option value="fighting">Fighting</option>
+        <option value="family">Family</option>
+        <option value="board-games">Board Games</option>
+        <option value="card">Card</option>
+        <option value="educational">Educational</option>
+      </select>
+    </div>
+    <div class="col-md-4 filters">
+      <select class="form-select"
+              [(ngModel)]="filters.platform">
+        <option value="">All platforms</option>
+        <option value="4">PC</option>
+        <option value="187">PlayStation</option>
+        <option value="186">Xbox</option>
+        <option value="7">Nintendo</option>
+        <option value="3">IOS</option>
+        <option value="21">Android</option>
+      </select>
+    </div>
+    <div class="col-md-4 filters">
+      <select class="form-select"
+              [(ngModel)]="filters.rating">
+        <option value="">All ratings</option>
+        <option value="high">80+ Metacritic</option>
+        <option value="mid">50–79</option>
+        <option value="low">0–49</option>
+      </select>
+    </div>
+  </div>
+  <div class="game-grid">
+    @for (game of games; track $index) {
+      <div class="game-card" [routerLink]="['/game', game.id]">
+        <div class="image-wrapper">
+          <img [src]="game.background_image" />
+          <div class="overlay"></div>
+          <div class="rating-badge">
+            {{ game.metacritic || "**" }}
+          </div>
+          <div class="platforms">
+            @if (game.parent_platforms?.some(p => p.platform.name === 'PC')) {
+              <i class="bi bi-pc-display"></i>
+            }
+            @if (game.parent_platforms?.some(p => p.platform.name === 'PlayStation')) {
+              <i class="bi bi-playstation"></i>
+            }
+            @if (game.parent_platforms?.some(p => p.platform.name === 'Xbox')) {
+              <i class="bi bi-xbox"></i>
+            }
+            @if (game.parent_platforms?.some(p => p.platform.name === 'Nintendo')) {
+              <i class="bi bi-nintendo-switch"></i>
+            }
+            @if (game.parent_platforms?.some(p => p.platform.id === 3)) {
+              <i class="bi bi-apple"></i>
+            }
+            @if (game.parent_platforms?.some(p => p.platform.name === 'Android')) {
+              <i class="bi bi-android2"></i>
+            }
+          </div>
+        </div>
+        <div class="info">
+          <h5 class="title">{{ game.name }}</h5>
+          <div class="meta">
+            <span>⭐ {{ game.rating }}</span>
+            <span>📅 {{ game.released }}</span>
+          </div>
+          <div class="genres">
+            @for (genre of game.genres; track $index) {
+              <span class="genre">{{ genre.name }}</span>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+<p class="d-lg-none" style="height: 65px;"></p>
+<p class="d-none d-lg-flex" style="height: 25px;"></p>

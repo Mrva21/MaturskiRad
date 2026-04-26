@@ -1,0 +1,75 @@
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+html, body {
+  background-color: #151515 !important;
+  color: #fff;
+}
+
+h1, h2, .logo {
+  font-family: 'Orbitron', sans-serif;
+}
+
+.card {
+  background-color: #1E293B;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #6366F1;
+}
+
+.btn-primary {
+  background-color: #6366F1;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #4F46E5;
+}
+
+.btn-outline-primary {
+  border-color: #6366F1 !important;
+  color: #6366F1 !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: #6366F1 !important;
+  color: white !important;
+}
+
+.btn-outline-secondary {
+  border-color: #9146ff !important;
+  color: #9146ff !important;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #9146ff !important;
+  color: white !important;
+}
+
+.rating-high {
+  color: #22C55E;
+}
+
+.rating-mid {
+  color: #FACC15;
+}
+
+.rating-low {
+  color: #EF4444;
+}
+
+.game-card {
+  border-radius: 10px;
+  width: 100%;
+}
+
+.game-title {
+  font-size: 18px;
+  margin-top: 10px;
+}
