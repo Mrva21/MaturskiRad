@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class Korisnici {
-  baseUrl: string = "http://localhost:3000/api";
+  baseUrl: string = "https://pixel-judge-api.onrender.com/api";
 
   constructor(private http: HttpClient) {}
 
