@@ -28,6 +28,7 @@ export class Detalji {
   email: string = "";
   username: string = "";
   text: string = "";
+  isDisabled: Boolean = false;
 
   setToCache(key: string, value: any, ttlMinutes = 60) {
     const item = {
@@ -107,6 +108,11 @@ export class Detalji {
       likes: Number(comment.likes) + 1,
       liked_by: changeLikedBy
     };
+    this.isDisabled = true;
+    setTimeout(() => {
+      this.isDisabled = false;
+      this.cd.detectChanges();
+    }, 1500);
     this.servis2.updateComment(id, change).subscribe(data => {
       this.loadComments();
     });
@@ -119,6 +125,11 @@ export class Detalji {
       likes: Number(comment.likes) - 1,
       liked_by: changeLikedBy
     };
+    this.isDisabled = true;
+    setTimeout(() => {
+      this.isDisabled = false;
+      this.cd.detectChanges();
+    }, 1500);
     this.servis2.updateComment(id, change).subscribe(data => {
       this.loadComments();
     });
