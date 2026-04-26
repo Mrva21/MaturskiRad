@@ -43,6 +43,25 @@ export class App {
   }
 
   register() {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const usernameRegex = /^[a-zA-Z0-9_-]{3,16}$/;
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]{6,}$/;
+
+    if (!emailRegex.test(this.email)) {
+      alert("Invalid Email!");
+      return;
+    }
+
+    if (!usernameRegex.test(this.username)) {
+      alert("Username needs to have between 3-16 (characters, numbers or dashes)!");
+      return;
+    }
+
+    if (!passwordRegex.test(this.password)) {
+      alert("Password needs to have at least 6 characters and 1 number!");
+      return;
+    }
+
     const user = {
       email: this.email,
       username: this.username,
