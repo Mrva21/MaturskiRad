@@ -52,7 +52,8 @@ export class App {
     if (existing) alert("User with that e-mail already exists!");
     else {
       this.servis.postUser(user).subscribe(data => {
-        alert(data.poruka)
+        alert(data.poruka);
+        window.location.reload();
       });
     }
   }
