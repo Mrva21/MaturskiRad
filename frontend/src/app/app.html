@@ -17,8 +17,27 @@
         <li class="nav-item"><a class="nav-link" routerLink="/trending" routerLinkActive="active">Trending</a></li>
         <li class="nav-item"><a class="nav-link" routerLink="/discussions" routerLinkActive="active">Discussions</a></li>
       </ul>
-      <form class="d-flex me-3">
-        <input type="search" class="form-control" placeholder="Search for a game...">
+      <form class="d-flex me-3 search-wrapper position-relative">
+        <input type="search" class="form-control" placeholder="Search for a game..." (input)="onSearch($event.target.value)" (focus)="isFocused = true">
+        @if (results.length > 0 && isFocused) {
+        <div class="search-dropdown">
+            @for (game of results; track $index) {
+              <div class="search-item" (click)="selected()" [routerLink]="['/game', game.id]">
+                <img
+                  [src]="game.background_image || 'assets/images/no_img.png'"
+                  class="search-img"
+                  alt=""
+                />
+                <div class="search-info">
+                  <div class="search-title">{{game.name}}</div>
+                  <div class="search-meta">
+                    ⭐ {{ game.rating }} • {{ game.released }}
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
       </form>
       @if (!isLoggedIn()) {
         <div>
@@ -45,9 +64,6 @@
       <span class="judge-brand">Pixel</span>
       <span>Judge</span>
     </a>
-    <form class="d-flex me-3">
-      <input type="search" class="form-control" placeholder="Search for a game...">
-    </form>
     @if (!isLoggedIn()) {
       <div>
         <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
@@ -63,6 +79,28 @@
         Log Out
       </button>
     }
+    <form class="d-flex me-3 mt-3 search-wrapper position-relative">
+      <input type="search" class="form-control" placeholder="Search for a game..." (input)="onSearch($event.target.value)" (focus)="isFocused = true">
+      @if (results.length > 0 && isFocused) {
+      <div class="search-dropdown">
+          @for (game of results; track $index) {
+            <div class="search-item" (click)="selected()" [routerLink]="['/game', game.id]">
+              <img
+                [src]="game.background_image || 'assets/images/no_img.png'"
+                class="search-img"
+                alt=""
+              />
+              <div class="search-info">
+                <div class="search-title">{{game.name}}</div>
+                <div class="search-meta">
+                  ⭐ {{ game.rating }} • {{ game.released }}
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </form>
   </div>
 </nav>
 <nav class="navbar mobile-navbar d-lg-none" style="background-color: #0e0e10;" data-bs-theme="dark">

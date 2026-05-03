@@ -15,6 +15,10 @@ export class Rawg {
     return this.http.get(`${this.baseUrl}/games?key=${this.apiKey}`);
   }
 
+  getGamesViaSearch(query: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/games?key=${this.apiKey}&search=${query}`);
+  }
+
   getGamesViaFilter(filters: any): Observable<any> {
     let params = new HttpParams().set('key', this.apiKey);
 

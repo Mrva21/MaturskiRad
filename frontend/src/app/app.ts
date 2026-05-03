@@ -1,7 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { Korisnici } from './services/korisnici';
+import { Rawg } from './services/rawg';
+import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +12,21 @@ import { Korisnici } from './services/korisnici';
   styleUrl: './app.css'
 })
 export class App {
-  constructor(private servis: Korisnici) {}
+  constructor(private servis: Korisnici, private servis2: Rawg, private cd: ChangeDetectorRef, private eRef: ElementRef) {}
   protected readonly title = signal('frontend');
 
   ngOnInit() {
+    this.searchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap(query => this.servis2.getGamesViaSearch(query))
+    ).subscribe((res: any) => {
+      this.results = res.results;
+      this.cd.detectChanges();
+    });
     this.servis.getUsers().subscribe(data => {
       this.users = data;
+      this.cd.detectChanges();
     });
   }
 
@@ -23,6 +34,9 @@ export class App {
   email: string = "";
   username: string = "";
   password: string = "";
+  searchSubject = new Subject<string>();
+  results: Array<any> = [];
+  isFocused: boolean = false;
 
   isLoggedIn(): boolean {
     return localStorage.getItem('loggedIn') === "true";
@@ -82,5 +96,29 @@ export class App {
     localStorage.removeItem("email");
     localStorage.removeItem("username");
     window.location.reload();
+  }
+
+  onSearch(query: string) {
+    if (!query || query.length < 2) {
+      this.results = [];
+      return;
+    }
+    this.searchSubject.next(query);
+  }
+
+  selected() {
+    this.results = [];
+    this.isFocused = false;
+    setTimeout(() => {
+      window.location.reload();
+      this.cd.detectChanges();
+    }, 200);
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: any) {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.isFocused = false;
+    }
   }
 }
