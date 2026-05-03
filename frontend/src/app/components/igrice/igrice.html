@@ -63,7 +63,7 @@
     @for (game of games; track $index) {
       <div class="game-card" [routerLink]="['/game', game.id]">
         <div class="image-wrapper">
-          <img [src]="game.background_image" />
+          <img [src]="game.background_image || 'assets/images/no_img.png'" />
           <div class="overlay"></div>
           <div class="rating-badge">
             {{ game.metacritic || "**" }}

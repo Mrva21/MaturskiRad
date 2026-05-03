@@ -4,7 +4,7 @@
       <div class="col-12 col-md-6 mb-3 mb-md-0">
         <div class="image-wrapper h-100">
           <img 
-            [src]="game.background_image" 
+            [src]="game.background_image || 'assets/images/no_img.png'" 
             class="w-100 h-100"
             alt="{{ game.name }}"
           >

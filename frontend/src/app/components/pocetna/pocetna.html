@@ -15,7 +15,7 @@
         @for (game of trendingGames; track $index) {
           <div class="col-4 d-flex flex-column">
             <div class="card w-100 h-100" [routerLink]="['game/', game.id]">
-              <img [src]="game.background_image" class="card-img">
+              <img [src]="game.background_image || 'assets/images/no_img.png'" class="card-img">
               <div class="card-img-overlay">
                 <h5 class="card-title">{{game.name}}</h5>
               </div>
@@ -32,7 +32,7 @@
     @for (game of topRatedGames; track $index) {
           <div class="col-4 d-flex flex-column">
             <div class="card w-100 h-100" [routerLink]="['game/', game.id]">
-              <img [src]="game.background_image" class="card-img">
+              <img [src]="game.background_image || 'assets/images/no_img.png'" class="card-img">
               <div class="card-img-overlay">
                 <h5 class="card-title">{{game.name}}</h5>
               </div>
