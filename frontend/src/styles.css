@@ -37,6 +37,11 @@ h1, h2, .logo {
   color: #6366F1 !important;
 }
 
+.btn-outline-primary.active {
+  background-color: #6366F1 !important;
+  color: white !important;
+}
+
 .btn-outline-primary:hover {
   background-color: #6366F1 !important;
   color: white !important;
@@ -50,18 +55,6 @@ h1, h2, .logo {
 .btn-outline-secondary:hover {
   background-color: #9146ff !important;
   color: white !important;
-}
-
-.rating-high {
-  color: #22C55E;
-}
-
-.rating-mid {
-  color: #FACC15;
-}
-
-.rating-low {
-  color: #EF4444;
 }
 
 .game-card {

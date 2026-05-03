@@ -35,27 +35,23 @@ export class Rawg {
     return this.http.get(`${this.baseUrl}/games/${id}?key=${this.apiKey}`);
   }
 
-  getGameTrailer(id: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/games/${id}/movies?key=${this.apiKey}`);
-  }
-
-  getTrendingGames(): Observable<any> {
+  getTrendingGames(days: number): Observable<any> {
     const today = new Date();
-    const lastMonth = new Date();
-    lastMonth.setMonth(today.getMonth() - 1);
+    const pastDate = new Date();
+    pastDate.setDate(today.getDate() - days);
 
     const formatDate = (d: Date) => d.toISOString().split('T')[0];
 
-    return this.http.get(`${this.baseUrl}/games?key=${this.apiKey}&dates=${formatDate(lastMonth)},${formatDate(today)}&ordering=-added&page-size=1`);
+    return this.http.get(`${this.baseUrl}/games?key=${this.apiKey}&dates=${formatDate(pastDate)},${formatDate(today)}&ordering=-added&page-size=10`);
   }
 
-  getTopRatedGames(): Observable<any> {
+  getTopRatedGames(days: number): Observable<any> {
     const today = new Date();
-    const lastThreeMonths = new Date();
-    lastThreeMonths.setMonth(today.getMonth() - 3);
+    const pastDate = new Date();
+    pastDate.setDate(today.getDate() - days);
 
     const formatDate = (d: Date) => d.toISOString().split('T')[0];
 
-    return this.http.get(`${this.baseUrl}/games?key=${this.apiKey}&dates=${formatDate(lastThreeMonths)},${formatDate(today)}&ordering=-rating&page-size=1`);
+    return this.http.get(`${this.baseUrl}/games?key=${this.apiKey}&dates=${formatDate(pastDate)},${formatDate(today)}&ordering=-rating&page-size=10`);
   }
 }

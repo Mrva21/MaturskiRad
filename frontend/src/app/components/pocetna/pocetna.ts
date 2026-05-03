@@ -12,11 +12,11 @@ export class Pocetna {
   constructor(private service: Rawg, private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.service.getTrendingGames().subscribe(rez => {
+    this.service.getTrendingGames(30).subscribe(rez => {
       this.trendingGames = rez.results.slice(0,3);
       this.cd.detectChanges();
     });
-    this.service.getTopRatedGames().subscribe(rez => {
+    this.service.getTopRatedGames(90).subscribe(rez => {
       this.topRatedGames = rez.results.slice(0, 3);
       this.cd.detectChanges();
     });
