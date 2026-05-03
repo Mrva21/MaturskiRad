@@ -22,19 +22,21 @@
         @if (results.length > 0 && isFocused) {
         <div class="search-dropdown">
             @for (game of results; track $index) {
-              <div class="search-item" (click)="selected()" [routerLink]="['/game', game.id]">
-                <img
-                  [src]="game.background_image || 'assets/images/no_img.png'"
-                  class="search-img"
-                  alt=""
-                />
-                <div class="search-info">
-                  <div class="search-title">{{game.name}}</div>
-                  <div class="search-meta">
-                    ⭐ {{ game.rating }} • {{ game.released }}
+              @if (game.rating > 0) {
+                <div class="search-item" (click)="selected()" [routerLink]="['/game', game.id]">
+                  <img
+                    [src]="game.background_image || 'assets/images/no_img.png'"
+                    class="search-img"
+                    alt=""
+                  />
+                  <div class="search-info">
+                    <div class="search-title">{{game.name}}</div>
+                    <div class="search-meta">
+                      ⭐ {{ game.rating }} • {{ game.released }}
+                    </div>
                   </div>
                 </div>
-              </div>
+              }
             }
           </div>
         }
@@ -84,19 +86,21 @@
       @if (results.length > 0 && isFocused) {
       <div class="search-dropdown">
           @for (game of results; track $index) {
-            <div class="search-item" (click)="selected()" [routerLink]="['/game', game.id]">
-              <img
-                [src]="game.background_image || 'assets/images/no_img.png'"
-                class="search-img"
-                alt=""
-              />
-              <div class="search-info">
-                <div class="search-title">{{game.name}}</div>
-                <div class="search-meta">
-                  ⭐ {{ game.rating }} • {{ game.released }}
+            @if (game.rating > 0) {
+              <div class="search-item" (click)="selected()" [routerLink]="['/game', game.id]">
+                <img
+                  [src]="game.background_image || 'assets/images/no_img.png'"
+                  class="search-img"
+                  alt=""
+                />
+                <div class="search-info">
+                  <div class="search-title">{{game.name}}</div>
+                  <div class="search-meta">
+                    ⭐ {{ game.rating }} • {{ game.released }}
+                  </div>
                 </div>
               </div>
-            </div>
+            }
           }
         </div>
       }

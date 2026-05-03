@@ -61,47 +61,49 @@
   </div>
   <div class="game-grid">
     @for (game of games; track $index) {
-      <div class="game-card" [routerLink]="['/game', game.id]">
-        <div class="image-wrapper">
-          <img [src]="game.background_image || 'assets/images/no_img.png'" />
-          <div class="overlay"></div>
-          <div class="rating-badge">
-            {{ game.metacritic || "**" }}
+      @if (game.rating > 0) {
+        <div class="game-card" [routerLink]="['/game', game.id]">
+          <div class="image-wrapper">
+            <img [src]="game.background_image || 'assets/images/no_img.png'" />
+            <div class="overlay"></div>
+            <div class="rating-badge">
+              {{ game.metacritic || "**" }}
+            </div>
+            <div class="platforms">
+              @if (game.parent_platforms?.some(p => p.platform.name === 'PC')) {
+                <i class="bi bi-pc-display"></i>
+              }
+              @if (game.parent_platforms?.some(p => p.platform.name === 'PlayStation')) {
+                <i class="bi bi-playstation"></i>
+              }
+              @if (game.parent_platforms?.some(p => p.platform.name === 'Xbox')) {
+                <i class="bi bi-xbox"></i>
+              }
+              @if (game.parent_platforms?.some(p => p.platform.name === 'Nintendo')) {
+                <i class="bi bi-nintendo-switch"></i>
+              }
+              @if (game.parent_platforms?.some(p => p.platform.id === 3)) {
+                <i class="bi bi-apple"></i>
+              }
+              @if (game.parent_platforms?.some(p => p.platform.name === 'Android')) {
+                <i class="bi bi-android2"></i>
+              }
+            </div>
           </div>
-          <div class="platforms">
-            @if (game.parent_platforms?.some(p => p.platform.name === 'PC')) {
-              <i class="bi bi-pc-display"></i>
-            }
-            @if (game.parent_platforms?.some(p => p.platform.name === 'PlayStation')) {
-              <i class="bi bi-playstation"></i>
-            }
-            @if (game.parent_platforms?.some(p => p.platform.name === 'Xbox')) {
-              <i class="bi bi-xbox"></i>
-            }
-            @if (game.parent_platforms?.some(p => p.platform.name === 'Nintendo')) {
-              <i class="bi bi-nintendo-switch"></i>
-            }
-            @if (game.parent_platforms?.some(p => p.platform.id === 3)) {
-              <i class="bi bi-apple"></i>
-            }
-            @if (game.parent_platforms?.some(p => p.platform.name === 'Android')) {
-              <i class="bi bi-android2"></i>
-            }
+          <div class="info">
+            <h5 class="title">{{ game.name }}</h5>
+            <div class="meta">
+              <span>⭐ {{ game.rating }}</span>
+              <span>📅 {{ game.released }}</span>
+            </div>
+            <div class="genres">
+              @for (genre of game.genres; track $index) {
+                <span class="genre">{{ genre.name }}</span>
+              }
+            </div>
           </div>
         </div>
-        <div class="info">
-          <h5 class="title">{{ game.name }}</h5>
-          <div class="meta">
-            <span>⭐ {{ game.rating }}</span>
-            <span>📅 {{ game.released }}</span>
-          </div>
-          <div class="genres">
-            @for (genre of game.genres; track $index) {
-              <span class="genre">{{ genre.name }}</span>
-            }
-          </div>
-        </div>
-      </div>
+      }
     }
   </div>
 </div>
