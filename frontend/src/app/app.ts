@@ -79,7 +79,8 @@ export class App {
     const user = {
       email: this.email,
       username: this.username,
-      password: this.password
+      password: this.password,
+      favourites: []
     };
     const existing = this.users.find(u => u.email === this.email);
     if (existing) alert("User with that e-mail already exists!");

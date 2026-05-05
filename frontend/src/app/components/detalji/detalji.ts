@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Korisnici } from '../../services/korisnici';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { retry } from 'rxjs';
 
 @Component({
   selector: 'app-detalji',
@@ -16,17 +17,15 @@ export class Detalji {
 
   ngOnInit() {
     this.gameId = this.ruta.snapshot.paramMap.get('id')!;
+    this.loadUser();
     this.loadGame();
     this.loadComments();
-    this.email = localStorage.getItem('email')!;
-    this.username = localStorage.getItem('username')!;
   }
 
   gameId: string = "";
+  user: any = null;
   game: any = null;
   comments: Array<any> = [];
-  email: string = "";
-  username: string = "";
   text: string = "";
   isDisabled: Boolean = false;
 
@@ -53,6 +52,13 @@ export class Detalji {
     return item.value;
   }
 
+  loadUser() {
+    this.servis2.getUserViaEmail(localStorage.getItem('email') || '').subscribe(data => {
+      this.user = data;
+      this.cd.detectChanges();
+    });
+  }
+
   loadGame() {
     const cacheKey = `game-${this.gameId}`;
     const cachedGame = this.getFromCache(cacheKey);
@@ -75,26 +81,60 @@ export class Detalji {
       this.cd.detectChanges();
     });
   }
+
+  favourited(favourites: string[]): boolean {
+    return favourites.includes(this.gameId);
+  }
+
+  favouriteGame(id: string, user: any) {
+    const changeFavourites = user.favourites;
+    changeFavourites.push(this.gameId);
+    const change: any = {
+      favourites: changeFavourites
+    };
+    this.isDisabled = true;
+    setTimeout(() => {
+      this.isDisabled = false;
+      this.cd.detectChanges();
+    }, 1500);
+    this.servis2.updateUser(id, change).subscribe(data => {
+      this.loadUser();
+    });
+  }
+
+  unfavouriteGame(id: string, user: any) {
+    let changeFavourites = user.favourites;
+    changeFavourites = changeFavourites.filter((u: any) => u !== this.gameId);
+    console.log(changeFavourites);
+    const change: any = {
+      favourites: changeFavourites
+    };
+    this.isDisabled = true;
+    setTimeout(() => {
+      this.isDisabled = false;
+      this.cd.detectChanges();
+    }, 1500);
+    this.servis2.updateUser(id, change).subscribe(data => {
+      this.loadUser();
+    });
+  }
   
   addComment() {
-    this.servis2.getUserViaEmail(this.email).subscribe(data => {
-      const user = {
-        email: data.email,
-        username: data.username
+    const newComment = {
+      game_id: this.gameId,
+      date: new Date(),
+      text: this.text,
+      likes: 0,
+      liked_by: [],
+      user_id: this.user._id,
+      user: {
+        email: this.user.email,
+        username: this.user.username
       }
-      const newComment = {
-        game_id: this.gameId,
-        date: new Date(),
-        text: this.text,
-        likes: 0,
-        liked_by: [],
-        user_id: data._id,
-        user: user
-      };
-      this.servis2.postComment(newComment).subscribe(data => {
-        alert("Comment Posted");
-        this.loadComments();
-      });
+    };
+    this.servis2.postComment(newComment).subscribe(data => {
+      alert("Comment Posted");
+      this.loadComments();
     });
   }
 
@@ -105,9 +145,13 @@ export class Detalji {
     });
   }
 
+  liked(liked_by: string[], user: any): boolean {
+    return liked_by.includes(this.user.email);
+  }
+
   likeComment(id: string, comment: any) {
     const changeLikedBy = comment.liked_by;
-    changeLikedBy.push(this.email);
+    changeLikedBy.push(this.user.email);
     const change: any = {
       likes: Number(comment.likes) + 1,
       liked_by: changeLikedBy
@@ -124,7 +168,7 @@ export class Detalji {
 
   unlikeComment(id: string, comment: any) {
     let changeLikedBy = comment.liked_by;
-    changeLikedBy = changeLikedBy.filter((u: any) => u !== this.email);
+    changeLikedBy = changeLikedBy.filter((u: any) => u !== this.user.email);
     const change: any = {
       likes: Number(comment.likes) - 1,
       liked_by: changeLikedBy
@@ -137,10 +181,6 @@ export class Detalji {
     this.servis2.updateComment(id, change).subscribe(data => {
       this.loadComments();
     });
-  }
-
-  liked(liked_by: string[]): boolean {
-    return liked_by.includes(this.email);
   }
 
   loggedIn(): boolean {

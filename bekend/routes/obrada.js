@@ -45,6 +45,19 @@ router.post('/user', async(req, res) => {
   }
 });
 
+router.patch('/user/:id', async(req, res) => {
+  try {
+    const id = new ObjectId(req.params.id);
+    const nov = req.body;
+    const rez = await db.collection('users').updateOne({
+      _id: id
+    }, { $set: nov });
+    res.send("Comment updated successfully!");
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 router.get('/allcomments/:id', async(req, res) => {
   try {
     const id = new ObjectId(req.params.id);
@@ -98,7 +111,7 @@ router.delete('/comment/:id', async(req, res) => {
   }
 });
 
-router.put('/comment/:id', async(req, res) => {
+router.patch('/comment/:id', async(req, res) => {
   try {
     const id = new ObjectId(req.params.id);
     const nov = req.body;

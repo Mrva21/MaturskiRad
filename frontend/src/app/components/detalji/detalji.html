@@ -49,6 +49,17 @@
               View Website
             </a>
           }
+          @if (loggedIn()) {
+            @if (user && favourited(user.favourites)) {
+              <button class="btn btn-sm action-btn liked" [disabled]="isDisabled" (click)="unfavouriteGame(user._id, user)">
+                <i class="bi bi-star-fill"></i>
+              </button>
+            } @else {
+              <button class="btn btn-sm action-btn" [disabled]="isDisabled" (click)="favouriteGame(user._id, user)">
+                <i class="bi bi-star"></i>
+              </button>
+            }
+          }
         </div>
         <div class="d-flex flex-wrap gap-2">
           @for (genre of game.genres; track genre.id) {
@@ -85,13 +96,13 @@
               {{ comment.text }}
             </div>
             <div class="comment-actions d-flex gap-2">
-              @if (email === comment.user.email) {
+              @if (user && user.email === comment.user.email) {
                 <button class="btn btn-sm action-btn" (click)="deleteComment(comment._id)">
                   <i class="bi bi-trash"></i>
                 </button>
               }
               @if (loggedIn()) {
-                @if (liked(comment.liked_by)) {
+                @if (user && liked(comment.liked_by, user)) {
                   <button class="btn btn-sm action-btn liked" [disabled]="isDisabled" (click)="unlikeComment(comment._id, comment)">
                     <i class="bi bi-heart-fill"></i>
                   </button>
@@ -129,10 +140,12 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="comment-user">
-              <span class="email">{{ email }}</span>
-              <span class="username">{{ username }}</span>
-            </div>
+        @if (user) {
+          <div class="comment-user">
+            <span class="email">{{ user.email }}</span>
+            <span class="username">{{ user.username }}</span>
+          </div>
+        }
         <form>
           <div class="form-group mt-3">
             <textarea 

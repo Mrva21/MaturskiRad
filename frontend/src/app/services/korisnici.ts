@@ -22,8 +22,14 @@ export class Korisnici {
     return this.http.post(`${this.baseUrl}/user`, user);
   }
 
+  updateUser(id: string, change: any): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/user/${id}`, change, {
+      responseType: 'text'
+    });
+  }
+
   getAllComments(id: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/comments/${id}`);
+    return this.http.get(`${this.baseUrl}/allcomments/${id}`);
   }
 
   getComments(id: string): Observable<any> {
@@ -39,7 +45,7 @@ export class Korisnici {
   }
 
   updateComment(id: string, change: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/comment/${id}`, change, {
+    return this.http.patch(`${this.baseUrl}/comment/${id}`, change, {
       responseType: 'text'
     });
   }
