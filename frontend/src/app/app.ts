@@ -4,15 +4,17 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { Korisnici } from './services/korisnici';
 import { Rawg } from './services/rawg';
 import { debounceTime, distinctUntilChanged, Subject, switchMap } from 'rxjs';
+import { Alert } from "./shared/alert/alert";
+import { AlertService } from './services/alert-service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, FormsModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, FormsModule, Alert],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
-  constructor(private servis: Korisnici, private servis2: Rawg, private cd: ChangeDetectorRef, private eRef: ElementRef) {}
+  constructor(private servis: Korisnici, private servis2: Rawg, private cd: ChangeDetectorRef, private eRef: ElementRef, private alServis: AlertService) {}
   protected readonly title = signal('frontend');
 
   ngOnInit() {
@@ -44,15 +46,18 @@ export class App {
 
   login() {
     const user = this.users.find(u => u.username === this.username);
-    if (!user) alert("User with that username doesn't exist!");
+    if (!user) {
+      this.alServis.show("User with that username doesn't exist!", "error");
+      return;
+    }
     if (user.password === this.password) {
-      alert("Successful Login!");
+      this.alServis.show("Successful Login!", "success");
       localStorage.setItem('loggedIn', 'true');
       localStorage.setItem('username', user.username);
       localStorage.setItem('email', user.email);
-      window.location.reload();
+      setTimeout(() => window.location.reload(), 2500);
     } else {
-      alert("Wrong password!");
+      this.alServis.show("Wrong password!", "error");
     }
   }
 
@@ -62,17 +67,17 @@ export class App {
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z0-9]{6,}$/;
 
     if (!emailRegex.test(this.email)) {
-      alert("Invalid Email!");
+      this.alServis.show("Invalid Email!", "error");
       return;
     }
 
     if (!usernameRegex.test(this.username)) {
-      alert("Username needs to have between 3-16 (characters, numbers or dashes)!");
+      this.alServis.show("Username needs to have between 3-16 (characters, numbers or dashes)!");
       return;
     }
 
     if (!passwordRegex.test(this.password)) {
-      alert("Password needs to have at least 6 characters and 1 number!");
+      this.alServis.show("Password needs to have at least 6 characters and 1 number!");
       return;
     }
 
@@ -83,10 +88,10 @@ export class App {
       favourites: []
     };
     const existing = this.users.find(u => u.email === this.email);
-    if (existing) alert("User with that e-mail already exists!");
+    if (existing) this.alServis.show("User with that e-mail already exists!", "error");
     else {
       this.servis.postUser(user).subscribe(data => {
-        alert(data.poruka);
+        this.alServis.show(data.poruka, "success");
         window.location.reload();
       });
     }

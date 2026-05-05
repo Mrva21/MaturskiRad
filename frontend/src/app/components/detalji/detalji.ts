@@ -5,6 +5,7 @@ import { Korisnici } from '../../services/korisnici';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { retry } from 'rxjs';
+import { AlertService } from '../../services/alert-service';
 
 @Component({
   selector: 'app-detalji',
@@ -13,7 +14,7 @@ import { retry } from 'rxjs';
   styleUrl: './detalji.css',
 })
 export class Detalji {
-  constructor(private servis: Rawg, private servis2: Korisnici, private ruta: ActivatedRoute, private cd: ChangeDetectorRef) {}
+  constructor(private servis: Rawg, private servis2: Korisnici, private ruta: ActivatedRoute, private cd: ChangeDetectorRef, private alServis: AlertService) {}
 
   ngOnInit() {
     this.gameId = this.ruta.snapshot.paramMap.get('id')!;
@@ -53,7 +54,7 @@ export class Detalji {
   }
 
   loadUser() {
-    this.servis2.getUserViaEmail(localStorage.getItem('email') || '').subscribe(data => {
+    this.servis2.getUserViaEmail(localStorage.getItem('email') || "err").subscribe(data => {
       this.user = data;
       this.cd.detectChanges();
     });
@@ -105,7 +106,6 @@ export class Detalji {
   unfavouriteGame(id: string, user: any) {
     let changeFavourites = user.favourites;
     changeFavourites = changeFavourites.filter((u: any) => u !== this.gameId);
-    console.log(changeFavourites);
     const change: any = {
       favourites: changeFavourites
     };
@@ -133,14 +133,14 @@ export class Detalji {
       }
     };
     this.servis2.postComment(newComment).subscribe(data => {
-      alert("Comment Posted");
+      this.alServis.show("Comment Posted", "success");
       this.loadComments();
     });
   }
 
   deleteComment(id: string) {
     this.servis2.deleteComment(id).subscribe(data => {
-      alert("Comment Deleted");
+      this.alServis.show("Comment Deleted", "success");
       this.loadComments();
     });
   }

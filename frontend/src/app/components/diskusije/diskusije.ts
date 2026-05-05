@@ -13,14 +13,20 @@ export class Diskusije {
   constructor(private servis: Korisnici, private servis2: Rawg, private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.loadGames();
+    this.loadGamesAndFavourites();
   }
 
   games: Array<any> = [];
   favourites: Array<any> = [];
   
-  loadGames() {
+  loadGamesAndFavourites() {
     this.servis.getUserViaEmail(localStorage.getItem('email') || '').subscribe(user => {
+      for (let i = 0; i < user.favourites.length; i++) {
+        this.servis2.getGameDetails(user.favourites[i]).subscribe(data => {
+            this.favourites.push(data);
+            this.cd.detectChanges();
+          });
+      }
       this.servis.getAllComments(user._id).subscribe(comments => {
         for (let i = 0; i < comments.length; i++) {
           this.servis2.getGameDetails(comments[i].game_id).subscribe(data => {
