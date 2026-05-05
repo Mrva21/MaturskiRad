@@ -45,6 +45,18 @@ router.post('/user', async(req, res) => {
   }
 });
 
+router.get('/allcomments/:id', async(req, res) => {
+  try {
+    const id = new ObjectId(req.params.id);
+    const rez = await db.collection('comments').find({
+      user_id: id
+    }).toArray();
+    res.json(rez);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 router.get('/comments/:id', async(req, res) => {
   try {
     const id = req.params.id;
@@ -60,6 +72,7 @@ router.get('/comments/:id', async(req, res) => {
 router.post('/comment', async(req, res) => {
   try {
     const nov = req.body;
+    nov.user_id = new ObjectId(nov.user_id);
     const rez = await db.collection('comments').insertOne(nov);
     res.json({
       poruka: "Comment created successfully!",

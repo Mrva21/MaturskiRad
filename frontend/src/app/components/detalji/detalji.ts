@@ -78,14 +78,18 @@ export class Detalji {
   
   addComment() {
     this.servis2.getUserViaEmail(this.email).subscribe(data => {
-      const user = data;
+      const user = {
+        email: data.email,
+        username: data.username
+      }
       const newComment = {
         game_id: this.gameId,
         date: new Date(),
-        user: user,
         text: this.text,
         likes: 0,
-        liked_by: []
+        liked_by: [],
+        user_id: data._id,
+        user: user
       };
       this.servis2.postComment(newComment).subscribe(data => {
         alert("Comment Posted");
@@ -97,7 +101,7 @@ export class Detalji {
   deleteComment(id: string) {
     this.servis2.deleteComment(id).subscribe(data => {
       alert("Comment Deleted");
-      window.location.reload();
+      this.loadComments();
     });
   }
 
@@ -135,12 +139,11 @@ export class Detalji {
     });
   }
 
-  liked(liked_by: string[]): Boolean {
+  liked(liked_by: string[]): boolean {
     return liked_by.includes(this.email);
   }
 
-  loggedIn(): Boolean {
-    if (localStorage.getItem('loggedIn')) return true;
-    else return false;
+  loggedIn(): boolean {
+    return localStorage.getItem('loggedIn') === 'true';
   }
 } 

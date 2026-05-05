@@ -22,6 +22,10 @@ export class Korisnici {
     return this.http.post(`${this.baseUrl}/user`, user);
   }
 
+  getAllComments(id: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/comments/${id}`);
+  }
+
   getComments(id: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/comments/${id}`);
   }
