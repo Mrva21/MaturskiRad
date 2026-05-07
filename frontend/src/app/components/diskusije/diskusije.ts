@@ -20,22 +20,25 @@ export class Diskusije {
   favourites: Array<any> = [];
   
   loadGamesAndFavourites() {
-    this.servis.getUserViaEmail(localStorage.getItem('email') || '').subscribe(user => {
-      for (let i = 0; i < user.favourites.length; i++) {
-        this.servis2.getGameDetails(user.favourites[i]).subscribe(data => {
-            this.favourites.push(data);
-            this.cd.detectChanges();
-          });
-      }
-      this.servis.getAllComments(user._id).subscribe(comments => {
-        for (let i = 0; i < comments.length; i++) {
-          this.servis2.getGameDetails(comments[i].game_id).subscribe(data => {
-            this.games.push(data);
-            this.cd.detectChanges();
-          });
+    const email = localStorage.getItem('email');
+    if (email) {
+      this.servis.getUserViaEmail(email).subscribe(user => {
+        for (let i = 0; i < user.favourites.length; i++) {
+          this.servis2.getGameDetails(user.favourites[i]).subscribe(data => {
+              this.favourites.push(data);
+              this.cd.detectChanges();
+            });
         }
+        this.servis.getAllComments(user._id).subscribe(comments => {
+          for (let i = 0; i < comments.length; i++) {
+            this.servis2.getGameDetails(comments[i].game_id).subscribe(data => {
+              this.games.push(data);
+              this.cd.detectChanges();
+            });
+          }
+        });
       });
-    });
+    }
   }
 
   loggedIn(): boolean {
