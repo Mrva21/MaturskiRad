@@ -30,15 +30,15 @@
   <h5 class="mb-3 mt-2">Top-Rated:</h5>
   <div class="row g-3 mb-3 h-100">
     @for (game of topRatedGames; track $index) {
-          <div class="col-4 d-flex flex-column">
-            <div class="card w-100 h-100" [routerLink]="['game/', game.id]">
-              <img [src]="game.background_image || 'assets/images/no_img.png'" class="card-img">
-              <div class="card-img-overlay">
-                <h5 class="card-title">{{game.name}}</h5>
-              </div>
-            </div>
+      <div class="col-4 d-flex flex-column">
+        <div class="card w-100 h-100" [routerLink]="['game/', game.id]">
+          <img [src]="game.background_image || 'assets/images/no_img.png'" class="card-img">
+          <div class="card-img-overlay">
+            <h5 class="card-title">{{game.name}}</h5>
           </div>
-        }
+        </div>
+      </div>
+    }
   </div>
 </div>
 <p class="d-lg-none" style="height: 65px;" routerLink="/"></p>
